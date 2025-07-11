@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="icon"
+      href="resources/favicon.ico"
+      type="image/x-icon"
+      sizes="96x96"
+    />
+
+    <title>Guess The Word Game | devChallenges.io</title>
+
+    <!--You are welcome to delete these styles or modify them in your own stylesheet -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        background: #cfd8dc;
+        font-family: 'Inter', Arial, sans-serif;
+      }
+      .game-bg {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: url('resources/bg-guess-the-word.jpg') center center/cover no-repeat;
+        position: relative;
+      }
+      /* .game-bg::before {
+        content: 'Guess the word';
+        position: absolute;
+        left: 10%;
+        top: 30%;
+        font-size: 6vw;
+        color: rgba(255,255,255,0.12);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        z-index: 0;
+        user-select: none;
+      } */
+      .game-container {
+        background: #181829;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        padding: 6vw 5vw 4vw 5vw;
+        min-width: 220px;
+        min-height: 220px;
+        max-width: 95vw;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      /* Responsive styles */
+      @media (max-width: 1024px) {
+        .game-container {
+          min-width: 180px;
+          min-height: 180px;
+          padding: 5vw 3vw 3vw 3vw;
+        }
+        .scrambled-word {
+          font-size: 1.2rem;
+          padding: 8px 8px;
+        }
+        .slot {
+          width: 28px;
+          height: 28px;
+          font-size: 1rem;
+        }
+        .game-title {
+          width: 120px !important;
+          margin-bottom: 12px !important;
+        }
+        .game-buttons button {
+          padding: 8px 16px;
+          font-size: 0.95rem;
+        }
+      }
+      @media (max-width: 700px) {
+        .game-container {
+          min-width: 120px;
+          min-height: 120px;
+          padding: 3vw 2vw 2vw 2vw;
+        }
+        .scrambled-word {
+          font-size: 0.9rem;
+          padding: 5px 3px;
+        }
+        .slot {
+          width: 18px;
+          height: 18px;
+          font-size: 0.7rem;
+        }
+        .game-title {
+          width: 80px !important;
+          margin-bottom: 8px !important;
+        }
+        .game-buttons button {
+          padding: 5px 8px;
+          font-size: 0.8rem;
+        }
+      }
+      @media (max-width: 420px) {
+        .game-container {
+          min-width: 80px;
+          min-height: 80px;
+          padding: 2vw 1vw 1vw 1vw;
+        }
+        .scrambled-word {
+          font-size: 0.7rem;
+          padding: 2px 1px;
+        }
+        .slot {
+          width: 12px;
+          height: 12px;
+          font-size: 0.5rem;
+        }
+        .game-title {
+          width: 50px !important;
+          margin-bottom: 4px !important;
+        }
+        .game-buttons button {
+          padding: 2px 4px;
+          font-size: 0.6rem;
+        }
+      }
+      }
+      .game-title {
+        color: #b983ff;
+        font-size: 1.5rem;
+        margin-bottom: 18px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+      .scrambled-word {
+        background: #23233b;
+        color: #fff;
+        font-size: 2rem;
+        letter-spacing: 0.5em;
+        border-radius: 8px;
+        padding: 12px 24px;
+        margin-bottom: 18px;
+        text-align: center;
+        font-family: 'Fira Mono', monospace;
+      }
+      .game-stats {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 12px;
+        color: #fff;
+        font-size: 1rem;
+      }
+      .tries-dots {
+        margin: 0 8px;
+      }
+      .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #fff;
+        opacity: 0.3;
+        margin-right: 2px;
+      }
+      .dot.active {
+        opacity: 1;
+        background: #b983ff;
+      }
+      .mistakes {
+        margin-left: 8px;
+        color: #b983ff;
+        font-size: 0.95em;
+      }
+      .letter-slots {
+        display: flex;
+        gap: 8px;
+        margin: 18px 0 24px 0;
+        justify-content: center;
+      }
+      .slot {
+        width: 38px;
+        height: 38px;
+        background: #23233b;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #23233b;
+        transition: border 0.2s;
+      }
+      .slot:not(:empty) {
+        border: 2px solid #b983ff;
+      }
+      .game-buttons {
+        display: flex;
+        gap: 18px;
+        margin-top: 8px;
+      }
+      .game-buttons button {
+        background: #a259c6;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 28px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .game-buttons button:hover {
+        background: #6d5dd3;
+      }
+      /* Responsive styles */
+      @media (max-width: 1024px) {
+        .game-bg::before {
+          font-size: 3.5vw;
+          left: 6vw;
+        }
+        .game-container {
+          min-width: 260px;
+          padding: 24px 4vw 18px 4vw;
+        }
+        .scrambled-word {
+          font-size: 1.3rem;
+          padding: 10px 10px;
+        }
+        .slot {
+          width: 32px;
+          height: 32px;
+          font-size: 1.1rem;
+        }
+      }
+      @media (max-width: 700px) {
+        .game-bg::before {
+          font-size: 2.5rem;
+          left: 2vw;
+        }
+        .game-container {
+          min-width: 180px;
+          padding: 12px 2vw 10px 2vw;
+        }
+        .scrambled-word {
+          font-size: 1rem;
+          padding: 6px 4px;
+        }
+        .slot {
+          width: 24px;
+          height: 24px;
+          font-size: 0.9rem;
+        }
+        .game-title {
+          font-size: 1.1rem;
+        }
+        .game-buttons button {
+          padding: 7px 12px;
+          font-size: 0.9rem;
+        }
+      }
+      @media (max-width: 420px) {
+        .game-bg::before {
+          font-size: 1.1rem;
+          left: 1vw;
+        }
+        .game-container {
+          min-width: 120px;
+          padding: 6px 1vw 6px 1vw;
+        }
+        .scrambled-word {
+          font-size: 0.8rem;
+          padding: 3px 2px;
+        }
+        .slot {
+          width: 16px;
+          height: 16px;
+          font-size: 0.7rem;
+        }
+        .game-title {
+          font-size: 0.8rem;
+        }
+        .game-buttons button {
+          padding: 4px 6px;
+          font-size: 0.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 
+
+  Word Scramblle
+
+  Tries (4/5):
+
+  Mistakes:  a, e, w, t 
+  
+  Random
+  
+  Reset
+  -->
+
+    <div class="game-bg">
+      <div class="game-container">
+        <img src="resources/word-scramblle-logo.svg" alt="Word Scramblle Logo" class="game-title" style="width: 180px; max-width: 90vw; margin-bottom: 18px;" />
+        <div class="scrambled-word" id="scrambledWord">r e l o w f</div>
+        <div class="game-stats">
+          <span>Tries (<span id="tries">4</span>/5):</span>
+          <span class="tries-dots" id="triesDots"></span>
+          <span class="mistakes">Mistakes: <span id="mistakes">a, e, w, t</span></span>
+        </div>
+        <div class="letter-slots" id="letterSlots">
+          <!-- Letter slots will be generated here -->
+        </div>
+        <div class="game-buttons">
+          <button id="randomBtn">Random</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+      </div>
+    </div>
+    <div class="author-info">
+      Coded by <a href="#">Ayokanmi Adejola</a> | Challenge by
+      <a href="https://www.devchallenges.io?ref=challenge" target="_blank"
+        >devChallenges.io</a
+      >.
+    </div>
+    <script>
+      // --- Game Data ---
+      const words = ["flower", "planet", "object", "random", "window", "purple", "button", "script", "design", "layout"];
+      let answer = "";
+      let scrambled = "";
+      let tries = 0;
+      let maxTries = 5;
+      let mistakes = [];
+      let currentGuess = [];
+
+      // --- DOM Elements ---
+      const scrambledWordEl = document.getElementById("scrambledWord");
+      const triesEl = document.getElementById("tries");
+      const triesDotsEl = document.getElementById("triesDots");
+      const mistakesEl = document.getElementById("mistakes");
+      const letterSlotsEl = document.getElementById("letterSlots");
+      const randomBtn = document.getElementById("randomBtn");
+      const resetBtn = document.getElementById("resetBtn");
+
+      // --- Utility Functions ---
+      function shuffle(str) {
+        const arr = str.split("");
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr.join("");
+      }
+
+      function pickWord() {
+        answer = words[Math.floor(Math.random() * words.length)];
+        scrambled = shuffle(answer);
+        while (scrambled === answer) scrambled = shuffle(answer);
+      }
+
+      function renderScrambled() {
+        scrambledWordEl.textContent = scrambled.split("").join(" ");
+      }
+
+      function renderTries() {
+        triesEl.textContent = tries;
+        triesDotsEl.innerHTML = "";
+        for (let i = 0; i < maxTries; i++) {
+          triesDotsEl.innerHTML += `<span class="dot${i < tries ? ' active' : ''}"></span>`;
+        }
+      }
+
+      function renderMistakes() {
+        mistakesEl.textContent = mistakes.join(", ");
+      }
+
+      function renderSlots() {
+        letterSlotsEl.innerHTML = "";
+        for (let i = 0; i < answer.length; i++) {
+          const val = currentGuess[i] ? currentGuess[i] : "_";
+          letterSlotsEl.innerHTML += `<span class="slot">${val}</span>`;
+        }
+      }
+
+      function resetGame(random = false) {
+        if (random || !answer) pickWord();
+        tries = 0;
+        mistakes = [];
+        currentGuess = [];
+        renderScrambled();
+        renderTries();
+        renderMistakes();
+        renderSlots();
+      }
+
+      // --- Event Handlers ---
+      document.addEventListener("keydown", (e) => {
+        if (!/^[a-zA-Z]$/.test(e.key) || currentGuess.length >= answer.length) return;
+        const letter = e.key.toLowerCase();
+        if (answer[currentGuess.length] === letter) {
+          currentGuess.push(letter);
+        } else {
+          mistakes.push(letter);
+          tries++;
+        }
+        renderTries();
+        renderMistakes();
+        renderSlots();
+        if (currentGuess.join("") === answer) {
+          setTimeout(() => alert("🎉 Correct! The word was '" + answer + "'."), 100);
+        } else if (tries >= maxTries) {
+          setTimeout(() => alert("❌ Out of tries! The word was '" + answer + "'."), 100);
+        }
+      });
+
+      randomBtn.onclick = () => resetGame(true);
+      resetBtn.onclick = () => resetGame(false);
+
+      // --- Initial Render ---
+      resetGame(true);
+    </script>
+  </body>
+</html>
