@@ -84,4 +84,4 @@ No build step or dependencies required.
 
 
 - **Coded by**: Ayokanmi Adejola
-- **Challenge by**: [devChallenges.io](https://devchallenges.io/)# Guess-The-Word
+- **Challenge by**: [devChallenges.io](https://devchallenges.io/)
