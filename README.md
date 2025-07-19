@@ -16,7 +16,7 @@
 
 ## 📝 Overview
 
-Guess The Word Game is a fully responsive, interactive word scramble game. Users are challenged to guess the correct word from a scrambled set of letters, with a limited number of tries. The project is inspired by the devChallenges design and focuses on accessibility, responsiveness, and clean UI/UX.
+Guess The Word Game is a fully responsive, interactive word scramble game. Users are challenged to guess the correct word from a scrambled set of letters, with a limited number of tries. The project is inspired by the devChallenges design and focuses on accessibility, responsiveness, and clean UI/UX
 
 ---
 
