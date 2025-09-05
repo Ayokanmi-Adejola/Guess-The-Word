@@ -45,7 +45,8 @@ Guess The Word Game is a fully responsive, interactive word scramble game. Users
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Ayokanmi-Adejola/guess-the-word-game.git
+   git clone https://github.com/Ayokanmi-Adejola/guess-the-word.git
+   cd guess-the-word
    ```
 2. **Open the project folder and launch `index.html` in your browser.**
 
