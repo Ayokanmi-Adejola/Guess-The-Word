@@ -1,12 +1,8 @@
-# Guess The Word Game | devChallenges
+# Guess The Word Game | devChallenges.io
 
 
 <div align="center">
   <img src="./thumbnail.jpg" alt="Guess The Word Game Screenshot" width="600"/>
-</div>
-
-<div align="center">
-  <b>Responsive Word Scramble Game built for <a href="https://devchallenges.io/challenge/guess-the-word" target="_blank">devChallenges.io</a></b>
 </div>
 
 ## 📝 Overview
